@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meal/models/meals.dart';
+import 'package:meal/Widgets/meal_item.dart';
+import 'package:meal/Screens/meal_detail.dart';
 
 class MealScreen extends StatelessWidget{
   const  MealScreen({
@@ -10,11 +12,17 @@ class MealScreen extends StatelessWidget{
 
     final String title;
     final List<Meal> meals;
+
+    void SelectedMeal(BuildContext context, Meal meal){
+      Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => MealDetailedScreen(meal: meal)));
+    }
   @override
   Widget build(BuildContext context) {
     Widget content =  ListView.builder(
       itemCount: meals.length,
-      itemBuilder: (ctx, index) => Text(meals[index].title),
+      itemBuilder: (ctx, index) => Mealitems(meal: meals[index], onSelectMeal: (meal){
+        SelectedMeal(context, meal);
+      }),
       );
       if (meals.isEmpty){
         content = Center(
