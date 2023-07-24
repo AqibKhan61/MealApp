@@ -3,50 +3,63 @@ import 'package:meal/models/meals.dart';
 import 'package:meal/Widgets/meal_item.dart';
 import 'package:meal/Screens/meal_detail.dart';
 
-class MealScreen extends StatelessWidget{
-  const  MealScreen({
+class MealScreen extends StatelessWidget {
+  const MealScreen({
     super.key,
-     this.title,
+    this.title,
     required this.meals,
-    });
+    required this.onToggleFavorit,
+  });
 
-    final String? title;
-    final List<Meal> meals;
+  final String? title;
+  final List<Meal> meals;
+  final void Function(Meal meal) onToggleFavorit;
 
-    void SelectedMeal(BuildContext context, Meal meal){
-      Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => MealDetailedScreen(meal: meal)));
-    }
+  void SelectedMeal(BuildContext context, Meal meal) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (ctx) => MealDetailedScreen(
+              meal: meal,
+              onToggleFavorit: onToggleFavorit,
+            )));
+  }
+
   @override
   Widget build(BuildContext context) {
-    Widget content =  ListView.builder(
+    Widget content = ListView.builder(
       itemCount: meals.length,
-      itemBuilder: (ctx, index) => Mealitems(meal: meals[index], onSelectMeal: (meal){
-        SelectedMeal(context, meal);
-      }),
+      itemBuilder: (ctx, index) => Mealitems(
+          meal: meals[index],
+          onSelectMeal: (meal) {
+            SelectedMeal(context, meal);
+          }),
+    );
+    if (meals.isEmpty) {
+      content = Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Oh...Uh there is nothing!!',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge!
+                  .copyWith(color: Theme.of(context).colorScheme.onBackground),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'Try to Add Some Meals',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge!
+                  .copyWith(color: Theme.of(context).colorScheme.onBackground),
+            )
+          ],
+        ),
       );
-      if (meals.isEmpty){
-        content = Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Oh...Uh there is nothing!!',
-              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                color: Theme.of(context).colorScheme.onBackground
-              ),
-              ),
-              const SizedBox(height: 20),
-              Text('Try to Add Some Meals',
-              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                color: Theme.of(context).colorScheme.onBackground
-              ),
-              )
-            ],
-          ) ,
-        );
-      }
-      if(title == null){
-        return content;
-      }
+    }
+    if (title == null) {
+      return content;
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -54,4 +67,5 @@ class MealScreen extends StatelessWidget{
       ),
       body: content,
     );
-  }}
+  }
+}
