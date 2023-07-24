@@ -3,6 +3,7 @@ import 'package:meal/models/meals.dart';
 import 'package:meal/Screens/Mealss.dart';
 import 'package:meal/Screens/categories.dart';
 import 'package:meal/Widgets/main_drawer.dart';
+import 'package:meal/Screens/filters_Screen.dart';
 
 class TabScreen extends StatefulWidget {
   const TabScreen({super.key});
@@ -16,9 +17,10 @@ class TabScreen extends StatefulWidget {
 class _TabScreenState extends State<TabScreen> {
   int _SelectedPageIndex = 0;
   final List<Meal> _favoritesMeal = [];
-  void _FavoriteInfo(String message){
+  void _FavoriteInfo(String message) {
     ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 
   void _MealfavoriteStatus(Meal meal) {
@@ -33,7 +35,6 @@ class _TabScreenState extends State<TabScreen> {
         _favoritesMeal.add(meal);
         _FavoriteInfo('Added to favorite!');
       });
-      
     }
   }
 
@@ -41,6 +42,17 @@ class _TabScreenState extends State<TabScreen> {
     setState(() {
       _SelectedPageIndex = index;
     });
+  }
+
+  void _onselectfilters(String identifier) {
+    Navigator.of(context).pop();
+    if (identifier == 'filters') {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (ctx) => const FiltersScreen(),
+        ),
+      );
+    }
   }
 
   @override
@@ -57,7 +69,7 @@ class _TabScreenState extends State<TabScreen> {
       activepageTitle = 'Your Favorites!';
     }
     return Scaffold(
-      drawer: const MainDrawer(),
+      drawer: MainDrawer(selectedFilters: _onselectfilters),
       appBar: AppBar(
         title: Text(
           activepageTitle,

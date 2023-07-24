@@ -2,7 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 
 class MainDrawer extends StatelessWidget {
-  const MainDrawer({super.key});
+  const MainDrawer({super.key, required this.selectedFilters});
+  final void Function(String identifier) selectedFilters;
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -53,7 +54,9 @@ class MainDrawer extends StatelessWidget {
                     fontSize: 24,
                   ),
             ),
-            onTap: (){},
+            onTap: (){
+              selectedFilters('meals');
+            },
             
           ),
            ListTile(
@@ -69,7 +72,9 @@ class MainDrawer extends StatelessWidget {
                     fontSize: 24,
                   ),
             ),
-            onTap: (){},
+            onTap: (){
+              selectedFilters('filters');
+            },
             
           )
         ],
