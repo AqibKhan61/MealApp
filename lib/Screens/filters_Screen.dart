@@ -32,6 +32,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
     vegetarianfilter = widget.currentFilter[Filters.Vegetarian]!;
     veganfilter = widget.currentFilter[Filters.Vegan]!;
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,14 +55,14 @@ class _FiltersScreenState extends State<FiltersScreen> {
       //   }
       // }),
       body: WillPopScope(
-        onWillPop:() async {
-           Navigator.of(context).pop({
-          Filters.Glutenfree: glutenFreefilter,
-          Filters.Lactosefree: lactoseFreefilter,
-          Filters.Vegetarian: vegetarianfilter,
-          Filters.Vegan: veganfilter,
-        });
-        return false;
+        onWillPop: () async {
+          Navigator.of(context).pop({
+            Filters.Glutenfree: glutenFreefilter,
+            Filters.Lactosefree: lactoseFreefilter,
+            Filters.Vegetarian: vegetarianfilter,
+            Filters.Vegan: veganfilter,
+          });
+          return false;
         },
         child: Column(
           children: [
@@ -90,7 +91,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                 right: 22,
               ),
             ),
-                      SwitchListTile(
+            SwitchListTile(
               value: lactoseFreefilter,
               onChanged: (isChecked) {
                 setState(() {
@@ -115,7 +116,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                 right: 22,
               ),
             ),
-                      SwitchListTile(
+            SwitchListTile(
               value: vegetarianfilter,
               onChanged: (isChecked) {
                 setState(() {
@@ -140,7 +141,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                 right: 22,
               ),
             ),
-                      SwitchListTile(
+            SwitchListTile(
               value: veganfilter,
               onChanged: (isChecked) {
                 setState(() {
