@@ -4,8 +4,8 @@ import 'package:meal/Screens/categories.dart';
 import 'package:meal/Widgets/main_drawer.dart';
 import 'package:meal/Screens/filters_Screen.dart';
 import 'package:meal/providers/favorite_meal.dart';
+import 'package:meal/Providers/filters-Provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 
 import'package:meal/Providers/meals_provider.dart';
 
@@ -28,7 +28,7 @@ class TabScreen extends ConsumerStatefulWidget {
 class _TabScreenState extends ConsumerState<TabScreen> {
   int _SelectedPageIndex = 0;
  // final List<Meal> _favoritesMeal = [];
-  Map<Filters, bool> _selectedFilters = kinitialFiters;
+  
 
 
 
@@ -56,32 +56,30 @@ class _TabScreenState extends ConsumerState<TabScreen> {
   void _onselectfilters(String identifier) async {
     Navigator.of(context).pop();
     if (identifier == 'filters') {
-      final result = await Navigator.of(context).push<Map<Filters, bool>>(
+      await Navigator.of(context).push<Map<Filters, bool>>(
         MaterialPageRoute(
-          builder: (ctx) =>  FiltersScreen(currentFilter: _selectedFilters),
+          builder: (ctx) =>  const FiltersScreen(),
         ),
       );
-      setState(() {
-        _selectedFilters = result ?? kinitialFiters;
-      });
-    }
+  }
   }
 
   @override
   Widget build(BuildContext context) {
     final meals = ref.watch(mealProvider);
+    final acticefilter = ref.watch(filtersProvider);
     final availableMeals = meals.where(
       (meal) {
-        if (_selectedFilters[Filters.Glutenfree]! && !meal.isGlutenFree) {
+        if (acticefilter[Filters.Glutenfree]! && !meal.isGlutenFree) {
           return false;
         }
-        if (_selectedFilters[Filters.Lactosefree]! && !meal.isLactoseFree) {
+        if (acticefilter[Filters.Lactosefree]! && !meal.isLactoseFree) {
           return false;
         }
-        if (_selectedFilters[Filters.Vegetarian]! && !meal.isVegetarian) {
+        if (acticefilter[Filters.Vegetarian]! && !meal.isVegetarian) {
           return false;
         }
-        if (_selectedFilters[Filters.Vegan]! && !meal.isVegan) {
+        if (acticefilter[Filters.Vegan]! && !meal.isVegan) {
           return false;
         }
         return true;

@@ -1,24 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:meal/Providers/filters-Provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
 
-enum Filters {
-  Glutenfree,
-  Lactosefree,
-  Vegetarian,
-  Vegan,
-}
 
-class FiltersScreen extends StatefulWidget {
-  const FiltersScreen({super.key, required this.currentFilter});
-  final Map<Filters, bool> currentFilter;
+
+class FiltersScreen extends ConsumerStatefulWidget{
+  const FiltersScreen({super.key,});
+  
   @override
-  State<StatefulWidget> createState() {
+  ConsumerState<FiltersScreen> createState() {
     return _FiltersScreenState();
   }
 }
 
-class _FiltersScreenState extends State<FiltersScreen> {
+class _FiltersScreenState extends ConsumerState<FiltersScreen> {
   var glutenFreefilter = false;
   var lactoseFreefilter = false;
   var vegetarianfilter = false;
@@ -27,10 +24,11 @@ class _FiltersScreenState extends State<FiltersScreen> {
   @override
   void initState() {
     super.initState();
-    glutenFreefilter = widget.currentFilter[Filters.Glutenfree]!;
-    lactoseFreefilter = widget.currentFilter[Filters.Lactosefree]!;
-    vegetarianfilter = widget.currentFilter[Filters.Vegetarian]!;
-    veganfilter = widget.currentFilter[Filters.Vegan]!;
+    final activeFilter =ref.read(filtersProvider);
+    glutenFreefilter = activeFilter[Filters.Glutenfree]!;
+    lactoseFreefilter = activeFilter[Filters.Lactosefree]!;
+    vegetarianfilter = activeFilter[Filters.Vegetarian]!;
+    veganfilter = activeFilter[Filters.Vegan]!;
   }
 
   @override
@@ -56,13 +54,14 @@ class _FiltersScreenState extends State<FiltersScreen> {
       // }),
       body: WillPopScope(
         onWillPop: () async {
-          Navigator.of(context).pop({
+          ref.read(filtersProvider.notifier).setFilters({
             Filters.Glutenfree: glutenFreefilter,
             Filters.Lactosefree: lactoseFreefilter,
             Filters.Vegetarian: vegetarianfilter,
             Filters.Vegan: veganfilter,
           });
-          return false;
+          //Navigator.of(context).pop();
+          return true;
         },
         child: Column(
           children: [
