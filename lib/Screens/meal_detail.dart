@@ -9,37 +9,57 @@ class MealDetailedScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final favoritemeal = ref.watch(favoriteMealProvider);
+    final isFavorite = favoritemeal.contains(meal);
     return Scaffold(
       appBar: AppBar(
         actions: [
           IconButton(
             onPressed: () {
-             final  wasAdded = ref
+              final wasAdded = ref
                   .read(favoriteMealProvider.notifier)
                   .toggleMealfavoriteStatus(meal);
               ScaffoldMessenger.of(context).clearSnackBars();
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(
-                    wasAdded ? 'Added to Favourites' : 'Removed from Favourites',
+                    wasAdded
+                        ? 'Added to Favourites'
+                        : 'Removed from Favourites',
                   ),
                 ),
               );
             },
-            icon: const Icon(Icons.star),
-          )
+            icon: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              transitionBuilder: (child, animation) {
+                return RotationTransition(
+                  turns: Tween(begin: 0.7, end: 1.0).animate(animation),
+                  child: child,
+                );
+              },
+              child: Icon(
+                isFavorite ? Icons.star : Icons.star_border,
+                key: ValueKey(isFavorite),
+              ),
+            ),
+          ),
         ],
+        title: Text(meal.title),
       ),
-      //title: Text(meal.title),
+      //
 
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Image.network(
-              meal.imageUrl,
-              fit: BoxFit.cover,
-              height: 300,
-              width: double.infinity,
+            Hero(
+              tag: meal.id,
+              child: Image.network(
+                meal.imageUrl,
+                fit: BoxFit.cover,
+                height: 300,
+                width: double.infinity,
+              ),
             ),
             const SizedBox(height: 15),
             Text(
